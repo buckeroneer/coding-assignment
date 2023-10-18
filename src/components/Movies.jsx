@@ -1,5 +1,6 @@
 import Movie from './Movie'
 import '../styles/movies.scss'
+import '../styles/movies.css'
 
 const Movies = ({ movies, viewTrailer, closeCard }) => {
 

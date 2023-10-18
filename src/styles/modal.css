@@ -1,0 +1,16 @@
+.modal {
+    border: 2px;
+    border-color: lightgray;
+}
+
+#btn-close-popup {
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    border-radius: 30px;
+    background-color: rgb(181, 181, 181);
+}
+
+.no-trailer-message {
+    color: grey
+}
