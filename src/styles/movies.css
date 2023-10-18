@@ -1,0 +1,9 @@
+div[data-testid="movies"] {
+    min-width: 50%;
+}
+
+div[data-testid="movies"] > div{
+    display: inline-block;
+    list-style: none;
+    margin: 5px 10px;
+}
