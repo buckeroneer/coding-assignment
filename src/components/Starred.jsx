@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import starredSlice from '../data/starredSlice'
+import starredSlice from '../slices/starredSlice'
+import numPageSlice from '../slices/numPageSlice'
 import Movie from './Movie'
 import '../styles/starred.scss'
 
@@ -9,6 +10,7 @@ const Starred = ({viewTrailer}) => {
     const state = useSelector((state) => state)
     const { starred } = state
     const { clearAllStarred } = starredSlice.actions
+    const { resetPageNumber } = numPageSlice.actions
     const dispatch = useDispatch()
     console.log(starred.starredMovies)
 
@@ -34,7 +36,7 @@ const Starred = ({viewTrailer}) => {
       {starred.starredMovies.length === 0 && (<div className="text-center empty-cart">
         <i className="bi bi-star" />
         <p>There are no starred movies.</p>
-        <p>Go to <Link to='/'>Home</Link></p>
+        <p>Go to <Link onClick={dispatch(resetPageNumber())} to='/'>Home</Link></p>
       </div>)}
     </div>
   )

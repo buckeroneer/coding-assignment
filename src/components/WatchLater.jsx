@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import watchLaterSlice from '../data/watchLaterSlice'
+import numPageSlice from '../slices/numPageSlice'
+import watchLaterSlice from '../slices/watchLaterSlice'
 import Movie from './Movie'
 import '../styles/starred.scss'
 
@@ -9,6 +10,7 @@ const WatchLater = ({viewTrailer}) => {
     const state = useSelector((state) => state)
     const { watchLater } = state
     const { remveAllWatchLater } = watchLaterSlice.actions
+    const { resetPageNumber } = numPageSlice.actions
     const dispatch = useDispatch()
 
   return (
@@ -33,7 +35,7 @@ const WatchLater = ({viewTrailer}) => {
       {watchLater.watchLaterMovies.length === 0 && (<div className="text-center empty-cart">
         <i className="bi bi-heart" />
         <p>You have no movies saved to watch later.</p>
-        <p>Go to <Link to='/'>Home</Link></p>
+        <p>Go to <Link onClick={dispatch(resetPageNumber())} to='/'>Home</Link></p>
       </div>)}
     </div>
   )

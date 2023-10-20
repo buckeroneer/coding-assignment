@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 
-export default function useMovieSearch(apiUrl, pageNumber) {
+import { getMoviesByDiscover, getMoviesBySearchTerm } from "../api/movies";
+
+export default function useMovieSearch(prevQuery, pageNumber) {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [moviesFetched, setMoviesFetched] = useState([]);
@@ -12,16 +13,20 @@ export default function useMovieSearch(apiUrl, pageNumber) {
     setIsLoading(true);
     setIsError(false);
     setError({});
+    console.log(pageNumber)
     if (pageNumber === 1) {
       setMoviesFetched([]);
     }
-    let cancel;
-    axios({
-      method: "GET",
-      url: apiUrl,
-      params: { page: pageNumber },
-      cancelToken: new axios.CancelToken((c) => (cancel = c)),
-    })
+    const controller = new AbortController();
+    let responseRequest;
+    prevQuery !== ''
+      ? (responseRequest = getMoviesBySearchTerm(
+          prevQuery,
+          pageNumber,
+          controller.signal
+        ))
+      : (responseRequest = getMoviesByDiscover(pageNumber, controller.signal));
+    responseRequest
       .then((response) => {
         setMoviesFetched((prev) => [...prev, ...response.data.results]);
         setHasNextPage(pageNumber < response.data.total_pages);
@@ -29,12 +34,16 @@ export default function useMovieSearch(apiUrl, pageNumber) {
       })
       .catch((error) => {
         setIsLoading(false);
-        if (axios.isCancel(error)) return;
+        if (controller.signal.aborted) {
+          console.log('Abort succedeed')
+          return;}
         setIsError(true);
         setError({ message: error.message });
       });
-    return () => cancel();
-  }, [apiUrl, pageNumber]);
+    return () => {
+      controller.abort();
+    };
+  }, [prevQuery, pageNumber]);
 
   return { isLoading, isError, error, moviesFetched, hasNextPage };
 }

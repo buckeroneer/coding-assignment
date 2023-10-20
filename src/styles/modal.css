@@ -1,16 +1,14 @@
-.modal {
-    border: 2px;
-    border-color: lightgray;
+.modalTrailer {
+    background-color: black;
 }
 
 #btn-close-popup {
     position: absolute;
     top: -20px;
     right: -10px;
-    border-radius: 30px;
-    background-color: rgb(181, 181, 181);
+    background-color: rgb(205, 73, 73);
 }
 
 .no-trailer-message {
-    color: grey
+    color: black
 }

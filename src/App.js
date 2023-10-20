@@ -1,13 +1,13 @@
-import { useEffect, useState, useRef, useCallback } from 'react'
-import { Routes, Route, createSearchParams, useSearchParams, useNavigate } from "react-router-dom"
-import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom"
 import 'reactjs-popup/dist/index.css'
 
-import useMovieSearch from './hooks/useMovieSearch'
-import { fetchMovies } from './data/moviesSlice'
-import { ENDPOINT_SEARCH, ENDPOINT_DISCOVER, ENDPOINT, API_KEY } from './constants'
+import numPageSlice from './slices/numPageSlice'
+import { ENDPOINT, API_KEY } from './constants'
+
+import ScrollContent from './components/ScollContent'
 import Header from './components/Header'
-import Movies from './components/Movies'
 import Starred from './components/Starred'
 import WatchLater from './components/WatchLater'
 import Modal from './components/Modal'
@@ -15,30 +15,14 @@ import './app.scss'
 
 const App = () => {
 
-  const state = useSelector((state) => state)
-  const [searchParams, setSearchParams] = useSearchParams()
-  const searchQuery = searchParams.get('search')
+  const { resetPageNumber } = numPageSlice.actions
+  const dispatch = useDispatch()
+
   const [videoKey, setVideoKey] = useState()
   const [isOpen, setOpen] = useState(false)
-  const [prevQuery, setPrevQuery] = useState(ENDPOINT_DISCOVER)
-  const [pageNum, setPageNum] = useState(1)
+  const [prevQuery, setPrevQuery] = useState('')
   const navigate = useNavigate()
-
-  const { isLoading, isError, error, moviesFetched, hasNextPage } = useMovieSearch(prevQuery, pageNum)
-
-  const observer = useRef()
-
-  const lastMovieRef = useCallback(node => {
-    if (isLoading) return
-    if (observer.current) observer.current.disconnect()
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasNextPage) {
-        console.log(pageNum)
-        setPageNum(prevPage => prevPage + 1)
-      }
-    })
-    if (node) observer.current.observe(node)
-  }, [isLoading, hasNextPage, pageNum])
+  const location = useLocation()
   
   const closeModal = () => setOpen(false)
   
@@ -48,12 +32,12 @@ const App = () => {
 
   const getSearchResults = (query) => {
     if (prevQuery !== query) {
-      setPageNum(1)
+      dispatch(resetPageNumber())
     }
     if (query !== '') {
-      setPrevQuery(`${ENDPOINT_SEARCH}&query=`+query)
+      setPrevQuery(query)
     } else {
-      setPrevQuery(ENDPOINT_DISCOVER)
+      setPrevQuery('')
     }
   }
 
@@ -83,15 +67,16 @@ const App = () => {
 
   return (
     <div className="App">
-      <Header searchMovies={searchMovies} searchParams={searchParams} setSearchParams={setSearchParams} />
+      <Header searchMovies={searchMovies}/>
 
       <div className="container">
         <Modal isOpen={isOpen} videoKey={videoKey} closeModal={closeModal}/>
-        <div className="movie-test">
-          <Movies innerRef={lastMovieRef} movies={moviesFetched || []} viewTrailer={viewTrailer} closeCard={closeCard} />
-          <h1>{isLoading && 'Loading...'}</h1>
-          <h1>{isError && error}</h1>
-        </div>
+        {location.pathname === '/' ? (
+        <ScrollContent className="movies-content" 
+        viewTrailer={viewTrailer} 
+        closeCard={closeCard} 
+        prevQuery={prevQuery} 
+        />): (<></>)}
         <Routes>
           <Route path="/"/>
           <Route path="/starred" element={<Starred viewTrailer={viewTrailer} />} />
