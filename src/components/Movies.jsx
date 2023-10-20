@@ -1,23 +1,34 @@
-import Movie from './Movie'
-import '../styles/movies.scss'
-import '../styles/movies.css'
+import Movie from "./Movie";
+import "../styles/movies.scss";
+import "../styles/movies.css";
 
-const Movies = ({ movies, viewTrailer, closeCard }) => {
+const Movies = ({ movies, viewTrailer, closeCard, innerRef }) => {
+  return (
+    <div data-testid="movies">
+      {movies?.map((movie, index) => {
+        if (index + 1 === movies.length) {
+          return (
+            <Movie
+              innerRef={innerRef}
+              movie={movie}
+              key={movie.id}
+              viewTrailer={viewTrailer}
+              closeCard={closeCard}
+            />
+          );
+        } else {
+          return (
+            <Movie
+              movie={movie}
+              key={movie.id}
+              viewTrailer={viewTrailer}
+              closeCard={closeCard}
+            />
+          );
+        }
+      })}
+    </div>
+  );
+};
 
-    return (
-        <div data-testid="movies">
-            {movies.movies.results?.map((movie) => {
-                return (
-                    <Movie 
-                        movie={movie} 
-                        key={movie.id}
-                        viewTrailer={viewTrailer}
-                        closeCard={closeCard}
-                    />
-                )
-            })}
-        </div>
-    )
-}
-
-export default Movies
+export default Movies;

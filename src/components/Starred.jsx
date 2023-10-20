@@ -10,6 +10,7 @@ const Starred = ({viewTrailer}) => {
     const { starred } = state
     const { clearAllStarred } = starredSlice.actions
     const dispatch = useDispatch()
+    console.log(starred.starredMovies)
 
   return (
     <div className="starred" data-testid="starred">
