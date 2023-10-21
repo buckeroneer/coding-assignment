@@ -11,7 +11,7 @@ const Modal = ({isOpen, videoKey, closeModal}) => {
             className="modalTrailer"
             >  
             <button className="btn btn-outline-dark btn-sm" id="btn-close-popup" onClick={closeModal}><b>X</b></button>         
-            {videoKey? (<YoutubePlayer videoKey={videoKey}/>) : (<h1 className="no-trailer-message">Not trailer found!</h1>)}
+            {videoKey ? (<YoutubePlayer videoKey={videoKey}/>) : (<h1 className="no-trailer-message">No trailer found!</h1>)}
             </Popup>
         </div>
     )

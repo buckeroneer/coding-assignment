@@ -1,16 +1,17 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import numPageSlice from '../../store/numPageSlice'
-import watchLaterSlice from '../../store/watchLaterSlice'
+import { moviesSlice, watchLaterSlice } from '../../store/index.js'
 import { Movie } from '../index.js'
 import './watchLater.scss'
 
-const WatchLater = ({viewTrailer}) => {
+const WatchLater = () => {
 
     const state = useSelector((state) => state)
-    const { watchLater } = state
+    const { watchLater, videoTrailer } = state
     const { removeAllWatchLater } = watchLaterSlice.actions
-    const { resetPageNumber } = numPageSlice.actions
+    const { resetPageNumber } = moviesSlice.actions
+    const { isOpen } = videoTrailer
+
     const dispatch = useDispatch()
 
     function handleResetPageNumber() {
@@ -30,7 +31,7 @@ const WatchLater = ({viewTrailer}) => {
           <Movie 
             movie={movie} 
             key={movie.id}
-            viewTrailer={viewTrailer}
+            isOpen={isOpen}
           />
         ))}
         </div>

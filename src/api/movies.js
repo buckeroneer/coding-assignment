@@ -5,16 +5,14 @@ const urlDiscoverMovies = ENDPOINT+'/discover/movie?api_key='+API_KEY+'&sort_by=
 const urlSearchMovies = ENDPOINT+'/search/movie?api_key='+API_KEY
 
 const getMovieById = async (id) => {
-    const URL = `${ENDPOINT}/movie/${id}?api_key=${API_KEY}&append_to_response=videos`
+    const url = `${ENDPOINT}/movie/${id}?api_key=${API_KEY}&append_to_response=videos`
 
-    const videoData = await fetch(URL)
-      .then((response) => response.json())
+    const request = axios.get(url)
 
-    return videoData;
+    return request;
   }
 
 const getMoviesBySearchTerm = (searchTerm, page, signal) => {
-    console.log('search called')
     const request = axios.get(urlSearchMovies, {
         params: {
             query: searchTerm,
@@ -26,7 +24,6 @@ const getMoviesBySearchTerm = (searchTerm, page, signal) => {
 }
 
 const getMoviesByDiscover = (page, signal) => {
-    console.log('discover called')
     const request = axios.get(urlDiscoverMovies, {
         params: {
             page,

@@ -1,13 +1,17 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import numPageSlice from '../../store/numPageSlice'
+import moviesSlice from '../../store/moviesSlice'
 
 import "./header.scss";
 
-const Header = ({ searchMovies }) => {
-  const { starredMovies } = useSelector((state) => state.starred);
-  const { resetPageNumber } = numPageSlice.actions
+const Header = () => {
+  const { starred, movieStore } = useSelector((state) => state);
+  const starredMovies = starred.starredMovies;
+  const { previousQuery } = movieStore;
+  const { resetMovies, resetPageNumber, setPreviousQuery } = moviesSlice.actions
+
+  const navigate = useNavigate();
   const dispatch = useDispatch()
 
   const cleanSearchInput = () => {
@@ -15,12 +19,28 @@ const Header = ({ searchMovies }) => {
     searchInput.value = ""
   }
 
+  const getSearchResults = (query) => {
+    if (previousQuery !== query) {
+      dispatch(resetPageNumber())
+      dispatch(resetMovies())
+      if (query !== '') {
+        dispatch(setPreviousQuery(query))
+      } else {
+        dispatch(setPreviousQuery(''))
+      }
+    }
+  }
+
+  const searchMovies = (query) => {
+    navigate('/')
+    getSearchResults(query)
+  }
+
   return (
     <header>
       <Link to="/" data-testid="home" onClick={() => {
-        searchMovies("");
         cleanSearchInput();
-        dispatch(resetPageNumber())
+        searchMovies("");
         }}>
         <i className="bi bi-film" />
       </Link>

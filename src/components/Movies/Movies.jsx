@@ -2,7 +2,7 @@ import { Movie } from '../index.js'
 import "./movies.scss";
 import "./movies.css";
 
-const Movies = ({ movies, viewTrailer, closeCard, innerRef }) => {
+const Movies = ({ movies, handleModal, innerRef }) => {
   return (
     <div data-testid="movies">
       {movies?.map((movie, index) => {
@@ -12,8 +12,7 @@ const Movies = ({ movies, viewTrailer, closeCard, innerRef }) => {
               innerRef={innerRef}
               movie={movie}
               key={movie.id}
-              viewTrailer={viewTrailer}
-              closeCard={closeCard}
+              handleModal={handleModal}
             />
           );
         } else {
@@ -21,8 +20,7 @@ const Movies = ({ movies, viewTrailer, closeCard, innerRef }) => {
             <Movie
               movie={movie}
               key={movie.id}
-              viewTrailer={viewTrailer}
-              closeCard={closeCard}
+              handleModal={handleModal}
             />
           );
         }

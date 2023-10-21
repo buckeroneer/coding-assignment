@@ -1,7 +1,7 @@
 import moviesSlice, { fetchMovies } from '../data/moviesSlice'
 import { moviesMock } from './movies.mocks'
 
-describe('MovieSlice test', () => {
+describe('moviesSlice test', () => {
     
     it('should set loading true while action is pending', () => {
         const action = {type: fetchMovies.pending};

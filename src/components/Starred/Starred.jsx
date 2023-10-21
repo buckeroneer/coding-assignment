@@ -1,16 +1,17 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import starredSlice from '../../store/starredSlice'
-import numPageSlice from '../../store/numPageSlice'
+import { moviesSlice, starredSlice } from '../../store/index.js'
 import { Movie } from '../index.js'
 import './starred.scss'
 
-const Starred = ({viewTrailer}) => {
+const Starred = () => {
 
-    const state = useSelector((state) => state)
-    const { starred } = state
-    const { clearAllStarred } = starredSlice.actions
-    const { resetPageNumber } = numPageSlice.actions
+    const state = useSelector((state) => state);
+    const { starred, videoTrailer } = state;
+    const { clearAllStarred } = starredSlice.actions;
+    const { resetPageNumber } = moviesSlice.actions;
+    const { isOpen } = videoTrailer;
+
     const dispatch = useDispatch()
 
     function handleResetPageNumber() {
@@ -30,7 +31,7 @@ const Starred = ({viewTrailer}) => {
           <Movie 
             movie={movie} 
             key={movie.id}
-            viewTrailer={viewTrailer}
+            isOpen={isOpen}
           />
         ))}
         </div>
