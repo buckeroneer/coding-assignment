@@ -1,6 +1,6 @@
-import Movie from "./Movie";
-import "../styles/movies.scss";
-import "../styles/movies.css";
+import { Movie } from '../index.js'
+import "./movies.scss";
+import "./movies.css";
 
 const Movies = ({ movies, viewTrailer, closeCard, innerRef }) => {
   return (

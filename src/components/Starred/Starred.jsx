@@ -1,9 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import starredSlice from '../slices/starredSlice'
-import numPageSlice from '../slices/numPageSlice'
-import Movie from './Movie'
-import '../styles/starred.scss'
+import starredSlice from '../../store/starredSlice'
+import numPageSlice from '../../store/numPageSlice'
+import { Movie } from '../index.js'
+import './starred.scss'
 
 const Starred = ({viewTrailer}) => {
 
@@ -12,7 +12,14 @@ const Starred = ({viewTrailer}) => {
     const { clearAllStarred } = starredSlice.actions
     const { resetPageNumber } = numPageSlice.actions
     const dispatch = useDispatch()
-    console.log(starred.starredMovies)
+
+    function handleResetPageNumber() {
+      dispatch(resetPageNumber());
+    }
+
+    function handleClearStarred() {
+      dispatch(clearAllStarred())
+    }
 
   return (
     <div className="starred" data-testid="starred">
@@ -29,14 +36,14 @@ const Starred = ({viewTrailer}) => {
         </div>
 
         <footer className="text-center">
-          <button className="btn btn-primary" onClick={() => dispatch(clearAllStarred())}>Remove all starred</button>
+          <button className="btn btn-primary" onClick={handleClearStarred}>Remove all starred</button>
         </footer>
       </div>)}
 
       {starred.starredMovies.length === 0 && (<div className="text-center empty-cart">
         <i className="bi bi-star" />
         <p>There are no starred movies.</p>
-        <p>Go to <Link onClick={dispatch(resetPageNumber())} to='/'>Home</Link></p>
+        <p>Go to <Link onClick={handleResetPageNumber} to='/'>Home</Link></p>
       </div>)}
     </div>
   )

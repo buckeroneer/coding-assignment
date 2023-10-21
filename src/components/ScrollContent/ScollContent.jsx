@@ -1,10 +1,10 @@
 import { useRef, useCallback } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 
-import Movies from "./Movies.jsx";
+import { Movies}  from "../index.js";
 
-import numPageSlice from '../slices/numPageSlice.js'
-import useMovieSearch from "../hooks/useMovieSearch.js";
+import numPageSlice from '../../store/numPageSlice.js'
+import useMovieSearch from "../../hooks/useMovieSearch.js";
 
 const ScrollContent = ({viewTrailer, closeCard, prevQuery}) => {
   const { numPage } = useSelector((state) => state)

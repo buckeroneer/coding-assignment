@@ -1,9 +1,9 @@
 import { Link, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import numPageSlice from '../slices/numPageSlice'
+import numPageSlice from '../../store/numPageSlice'
 
-import "../styles/header.scss";
+import "./header.scss";
 
 const Header = ({ searchMovies }) => {
   const { starredMovies } = useSelector((state) => state.starred);

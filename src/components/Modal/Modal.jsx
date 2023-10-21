@@ -1,6 +1,6 @@
 import Popup from "reactjs-popup";
-import YoutubePlayer from "./YoutubePlayer";
-import '../styles/modal.css'
+import { YoutubePlayer } from "../index.js";
+import './modal.css'
 
 const Modal = ({isOpen, videoKey, closeModal}) => {
     return(

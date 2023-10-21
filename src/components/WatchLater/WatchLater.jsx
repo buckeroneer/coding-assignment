@@ -1,17 +1,25 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import numPageSlice from '../slices/numPageSlice'
-import watchLaterSlice from '../slices/watchLaterSlice'
-import Movie from './Movie'
-import '../styles/starred.scss'
+import numPageSlice from '../../store/numPageSlice'
+import watchLaterSlice from '../../store/watchLaterSlice'
+import { Movie } from '../index.js'
+import './watchLater.scss'
 
 const WatchLater = ({viewTrailer}) => {
 
     const state = useSelector((state) => state)
     const { watchLater } = state
-    const { remveAllWatchLater } = watchLaterSlice.actions
+    const { removeAllWatchLater } = watchLaterSlice.actions
     const { resetPageNumber } = numPageSlice.actions
     const dispatch = useDispatch()
+
+    function handleResetPageNumber() {
+      dispatch(resetPageNumber());
+    }
+
+    function handleClearWatchLater() {
+      dispatch(removeAllWatchLater())
+    }
 
   return (
     <div className="starred" data-testid="watch-later-div">
@@ -28,14 +36,14 @@ const WatchLater = ({viewTrailer}) => {
         </div>
 
         <footer className="text-center">
-          <button className="btn btn-primary" onClick={() => dispatch(remveAllWatchLater())}>Empty list</button>
+          <button className="btn btn-primary" onClick={handleClearWatchLater}>Empty list</button>
         </footer>
       </div>)}
 
       {watchLater.watchLaterMovies.length === 0 && (<div className="text-center empty-cart">
         <i className="bi bi-heart" />
         <p>You have no movies saved to watch later.</p>
-        <p>Go to <Link onClick={dispatch(resetPageNumber())} to='/'>Home</Link></p>
+        <p>Go to <Link onClick={handleResetPageNumber} to='/'>Home</Link></p>
       </div>)}
     </div>
   )

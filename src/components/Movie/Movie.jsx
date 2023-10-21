@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
-import starredSlice from '../slices/starredSlice'
-import watchLaterSlice from '../slices/watchLaterSlice'
-import placeholder from '../assets/not-found-500X750.jpeg'
+import starredSlice from '../../store/starredSlice'
+import watchLaterSlice from '../../store/watchLaterSlice'
+import placeholder from '../../assets/not-found-500X750.jpeg'
 
 const Movie = ({ movie, viewTrailer, closeCard, innerRef }) => {
 

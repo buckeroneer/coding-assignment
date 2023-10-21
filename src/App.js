@@ -3,14 +3,11 @@ import { useDispatch } from 'react-redux'
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom"
 import 'reactjs-popup/dist/index.css'
 
-import numPageSlice from './slices/numPageSlice'
+import numPageSlice from './store/numPageSlice'
 import { ENDPOINT, API_KEY } from './constants'
 
-import ScrollContent from './components/ScollContent'
-import Header from './components/Header'
-import Starred from './components/Starred'
-import WatchLater from './components/WatchLater'
-import Modal from './components/Modal'
+import { ScrollContent, Header, Starred, WatchLater, Modal } from './components/index.js'
+
 import './app.scss'
 
 const App = () => {
