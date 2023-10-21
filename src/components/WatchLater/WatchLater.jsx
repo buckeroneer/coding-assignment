@@ -1,16 +1,15 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { moviesSlice, watchLaterSlice } from '../../store/index.js'
-import { Movie } from '../index.js'
+import { Movies } from '../index.js'
 import './watchLater.scss'
 
 const WatchLater = () => {
 
     const state = useSelector((state) => state)
-    const { watchLater, videoTrailer } = state
+    const { watchLater } = state
     const { removeAllWatchLater } = watchLaterSlice.actions
     const { resetPageNumber } = moviesSlice.actions
-    const { isOpen } = videoTrailer
 
     const dispatch = useDispatch()
 
@@ -26,16 +25,7 @@ const WatchLater = () => {
     <div className="starred" data-testid="watch-later-div">
       {watchLater.watchLaterMovies.length > 0 && (<div data-testid="watch-later-movies" className="starred-movies">
         <h6 className="header">Watch Later List</h6>
-        <div className="row">
-        {watchLater.watchLaterMovies.map((movie) => (
-          <Movie 
-            movie={movie} 
-            key={movie.id}
-            isOpen={isOpen}
-          />
-        ))}
-        </div>
-
+        <Movies movies={watchLater.watchLaterMovies}/>
         <footer className="text-center">
           <button className="btn btn-primary" onClick={handleClearWatchLater}>Empty list</button>
         </footer>

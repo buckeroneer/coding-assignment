@@ -1,16 +1,15 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { moviesSlice, starredSlice } from '../../store/index.js'
-import { Movie } from '../index.js'
+import { Movies } from '../index.js'
 import './starred.scss'
 
 const Starred = () => {
 
     const state = useSelector((state) => state);
-    const { starred, videoTrailer } = state;
+    const { starred } = state;
     const { clearAllStarred } = starredSlice.actions;
     const { resetPageNumber } = moviesSlice.actions;
-    const { isOpen } = videoTrailer;
 
     const dispatch = useDispatch()
 
@@ -26,16 +25,7 @@ const Starred = () => {
     <div className="starred" data-testid="starred">
       {starred.starredMovies.length > 0 && (<div data-testid="starred-movies" className="starred-movies">
         <h6 className="header">Starred movies</h6>
-        <div className="row">
-        {starred.starredMovies.map((movie) => (
-          <Movie 
-            movie={movie} 
-            key={movie.id}
-            isOpen={isOpen}
-          />
-        ))}
-        </div>
-
+        <Movies movies={starred.starredMovies}/>
         <footer className="text-center">
           <button className="btn btn-primary" onClick={handleClearStarred}>Remove all starred</button>
         </footer>
