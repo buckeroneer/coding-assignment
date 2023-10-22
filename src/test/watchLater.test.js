@@ -33,7 +33,7 @@ describe("Watch Later tests", () => {
       });
       await userEvent.click(watchLaterButton);
     
-      const watchLaterNavLink = screen.getByTestId("nav-fav");
+      const watchLaterNavLink = screen.getByTestId("nav-fav-header");
       await waitFor(() => {
         expect(watchLaterNavLink).toBeInTheDocument();
       });

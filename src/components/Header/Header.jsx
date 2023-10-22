@@ -63,7 +63,7 @@ const Header = () => {
             <i className="bi bi-star" />
           )}
         </NavLink>
-        <NavLink to="/watch-later" className="nav-fav" data-testid="nav-fav">
+        <NavLink to="/watch-later" className="nav-fav" data-testid="nav-fav-header">
           watch later
         </NavLink>
       </nav>
