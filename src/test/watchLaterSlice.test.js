@@ -1,5 +1,5 @@
-import watchLaterSlice from '../store/watchLaterSlice'
-import { moviesMock } from './movies.mocks'
+import watchLaterSlice from '../store/watchLaterSlice.js'
+import { moviesMock } from './mocks/movies.mocks.js'
 
 describe('watchLaterSlice test', () => {
 
@@ -28,7 +28,7 @@ describe('watchLaterSlice test', () => {
 
       it('should remove all movies', () => {
         const initialState = { ...state, watchLaterMovies: moviesMock }
-        const action = watchLaterSlice.actions.remveAllWatchLater(state)
+        const action = watchLaterSlice.actions.removeAllWatchLater(state)
         const result = watchLaterSlice.reducer(initialState, action)
         expect(Object.keys(result.watchLaterMovies).length).toEqual(0)
       })
