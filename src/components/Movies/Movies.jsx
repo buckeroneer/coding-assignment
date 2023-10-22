@@ -10,28 +10,25 @@ const Movies = ({ movies, innerRef }) => {
   const [videoKey, setVideoKey] = useState("");
 
   async function getMovie(id) {
-    const request = getMovieById(id);
-    request
-      .then((response) => {
-        const dataMovie = response.data;
-        if (dataMovie.videos && dataMovie.videos.results.length) {
-          const trailer = dataMovie.videos.results.find(
-            (vid) => vid.type === "Trailer"
-          );
-          let key = trailer ? trailer.key : dataMovie.videos.results[0].key;
-          setVideoKey(key);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        console.log("An error occured during the trailer search...");
-        setVideoKey("");
-      });
+    try {
+      const dataMovie = await getMovieById(id);
+      if (dataMovie.videos && dataMovie.videos.results.length) {
+        const trailer = dataMovie.videos.results.find(
+          (vid) => vid.type === "Trailer"
+        );
+        let key = trailer ? trailer.key : dataMovie.videos.results[0].key;
+        console.log(key)
+        setVideoKey(key);
+      }
+    } catch (error) {
+      console.log(error);
+      console.log("An error occured during the trailer search...");
+      setVideoKey("");
+    }
   }
 
   async function viewTrailer(movie) {
     await getMovie(movie.id);
-    setVideoKey(videoKey);
     setIsOpen(true);
   }
 
@@ -42,11 +39,11 @@ const Movies = ({ movies, innerRef }) => {
 
   const handleTrailer = (movie) => {
     viewTrailer(movie);
-  }
+  };
 
   return (
     <>
-      <Modal isOpen={isOpen} videoKey={videoKey} closeModal={closeModal}/>
+      <Modal isOpen={isOpen} videoKey={videoKey} closeModal={closeModal} />
       <div data-testid="movies">
         {movies?.map((movie, index) => {
           if (index + 1 === movies.length) {

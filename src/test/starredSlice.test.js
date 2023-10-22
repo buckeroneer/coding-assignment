@@ -1,4 +1,4 @@
-import starredSlice from '../data/starredSlice'
+import starredSlice from '../store/starredSlice'
 import { moviesMock } from './movies.mocks'
 
 describe('starredSlice test', () => {

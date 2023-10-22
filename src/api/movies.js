@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ENDPOINT, API_KEY } from '../constants.js';
 
 const urlDiscoverMovies = ENDPOINT+'/discover/movie?api_key='+API_KEY+'&sort_by=vote_count.desc';
@@ -7,30 +6,33 @@ const urlSearchMovies = ENDPOINT+'/search/movie?api_key='+API_KEY
 const getMovieById = async (id) => {
     const url = `${ENDPOINT}/movie/${id}?api_key=${API_KEY}&append_to_response=videos`
 
-    const request = axios.get(url)
+    const response = await fetch(url)
 
-    return request;
+    const data = await response.json();
+    return data;
   }
 
-const getMoviesBySearchTerm = (searchTerm, page, signal) => {
-    const request = axios.get(urlSearchMovies, {
-        params: {
-            query: searchTerm,
-            page,
-            signal
-        }
+const getMoviesBySearchTerm = async (searchTerm, page, signal) => {
+    const completeSearchUrl = `${urlSearchMovies}&query=${searchTerm}&page=${page}`
+
+    const response = await fetch(completeSearchUrl, {
+        signal
     });
-    return request;
+
+    const data = await response.json();
+    return data;
 }
 
-const getMoviesByDiscover = (page, signal) => {
-    const request = axios.get(urlDiscoverMovies, {
-        params: {
-            page,
+const getMoviesByDiscover = async (page, signal) => {
+    const completeDiscoverUrl = `${urlDiscoverMovies}&page=${page}`
+
+    const response = await fetch(completeDiscoverUrl, {
             signal
         }
-    });
-    return request;
+    );
+
+    const data = await response.json();
+    return data;
 }
 
 export { getMovieById, getMoviesBySearchTerm, getMoviesByDiscover}

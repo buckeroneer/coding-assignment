@@ -7,12 +7,14 @@ export const searchMovies = createAsyncThunk(
   async (params, thunkAPI) => {
     const { query, pageNumber } = params;
     try {
-      const request = await getMoviesBySearchTerm(
+      const response = await getMoviesBySearchTerm(
         query,
         pageNumber,
         thunkAPI.signal
       );
-      return request.data;
+
+      return await response;
+      
     } catch (error) {
       return thunkAPI.rejectWithValue({
         message: "Error querying movies",
@@ -27,11 +29,13 @@ export const discoverMovies = createAsyncThunk(
     async (params, thunkAPI) => {
       const { pageNumber } = params;
       try {
-        const request = await getMoviesByDiscover(
+        const response = await getMoviesByDiscover(
           pageNumber,
           thunkAPI.signal
         );
-        return request.data;
+
+        return await response;
+
       } catch (error) {
         return thunkAPI.rejectWithValue({
             message: "Error querying movies",

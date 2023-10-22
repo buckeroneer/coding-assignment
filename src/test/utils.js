@@ -4,9 +4,9 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
-import moviesSlice from '../data/moviesSlice'
-import starredSlice from '../data/starredSlice'
-import watchLaterSlice from '../data/watchLaterSlice'
+import moviesSlice from '../store/moviesSlice'
+import starredSlice from '../store/starredSlice'
+import watchLaterSlice from '../store/watchLaterSlice'
 
 export function renderWithProviders(
   ui,
