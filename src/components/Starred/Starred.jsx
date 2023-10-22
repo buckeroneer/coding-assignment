@@ -10,14 +10,15 @@ const Starred = () => {
     const { starred } = state;
     const { clearAllStarred } = starredSlice.actions;
     const [, setSearchParams] = useSearchParams();
-    const { resetPageNumber, resetMovies } = moviesSlice.actions;
+    const { resetPageNumber, resetMovies, setDiscoverProcess } = moviesSlice.actions;
 
     const dispatch = useDispatch()
 
-    function handleResetPageNumber() {
+    function handleResetPage() {
       dispatch(resetPageNumber());
-      dispatch(resetMovies(""));
+      dispatch(resetMovies());
       setSearchParams();
+      dispatch(setDiscoverProcess())
     }
 
     function handleClearStarred() {
@@ -37,7 +38,7 @@ const Starred = () => {
       {starred.starredMovies.length === 0 && (<div className="text-center empty-cart">
         <i className="bi bi-star" />
         <p>There are no starred movies.</p>
-        <p>Go to <Link onClick={handleResetPageNumber} to='/'>Home</Link></p>
+        <p>Go to <Link onClick={handleResetPage} to='/'>Home</Link></p>
       </div>)}
     </div>
   )

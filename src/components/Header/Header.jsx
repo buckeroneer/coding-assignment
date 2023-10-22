@@ -1,50 +1,76 @@
-import { Link, NavLink, useNavigate, createSearchParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  useNavigate,
+  createSearchParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import moviesSlice from '../../store/moviesSlice'
+import moviesSlice from "../../store/moviesSlice";
 
 import "./header.scss";
 
 const Header = () => {
-  const { starred } = useSelector((state) => state);
+  const { starred, movieStore } = useSelector((state) => state);
   const starredMovies = starred.starredMovies;
-  
-  const { resetMovies, resetPageNumber } = moviesSlice.actions
 
-  const [searchParams, setSearchParams] = useSearchParams()
-  const searchQuery = searchParams.get('search')
+  const { discoverProcess } = movieStore;
+  const {
+    resetMovies,
+    resetPageNumber,
+    setDiscoverProcess,
+    unsetDiscoverProcess,
+  } = moviesSlice.actions;
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search");
 
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const cleanSearchInput = () => {
-    let searchInput = document.querySelector("input[class='form-control rounded']");
-    searchInput.value = ""
+  function cleanSearchInput() {
+    let searchInput = document.querySelector(
+      "input[class='form-control rounded']"
+    );
+    searchInput.value = "";
   }
 
-  const getSearchResults = (query) => {
+  function getSearchResults(query) {
     if (searchQuery !== query) {
-      dispatch(resetPageNumber())
-      dispatch(resetMovies())
-      if (query !== '') {
-        setSearchParams(createSearchParams({ search: query }))
+      dispatch(resetPageNumber());
+      dispatch(resetMovies());
+      if (query !== "") {
+        setSearchParams(createSearchParams({ search: query }));
+        dispatch(unsetDiscoverProcess());
       } else {
-        setSearchParams(createSearchParams())
+        setSearchParams(createSearchParams());
+        dispatch(setDiscoverProcess());
       }
     }
   }
 
-  const searchMovies = (query) => {
-    navigate('/')
-    getSearchResults(query)
+  function searchMovies(query) {
+    if (query !== "") {
+      dispatch(unsetDiscoverProcess())
+    }
+    navigate("/");
+    getSearchResults(query);
+  }
+
+  function handleHomeReset() {
+    if (searchQuery || !discoverProcess) {
+      cleanSearchInput();
+      dispatch(resetPageNumber());
+      dispatch(resetMovies());
+      searchMovies("");
+    }
+    window.scrollTo(0, 0);
   }
 
   return (
     <header>
-      <Link to="/" data-testid="home" onClick={() => {
-        cleanSearchInput();
-        searchMovies("");
-        }}>
+      <Link to="/" data-testid="home" onClick={handleHomeReset}>
         <i className="bi bi-film" />
       </Link>
 
@@ -63,7 +89,11 @@ const Header = () => {
             <i className="bi bi-star" />
           )}
         </NavLink>
-        <NavLink to="/watch-later" className="nav-fav" data-testid="nav-fav-header">
+        <NavLink
+          to="/watch-later"
+          className="nav-fav"
+          data-testid="nav-fav-header"
+        >
           watch later
         </NavLink>
       </nav>
@@ -72,7 +102,7 @@ const Header = () => {
         <input
           type="search"
           data-testid="search-movies"
-          onKeyUp={(e) => searchMovies(e.target.value)}
+          onChange={(e) => searchMovies(e.target.value)}
           className="form-control rounded"
           placeholder="Search movies..."
           aria-label="Search movies"

@@ -11,14 +11,15 @@ const WatchLater = () => {
     const { watchLater } = state
     const { removeAllWatchLater } = watchLaterSlice.actions
     const [, setSearchParams] = useSearchParams();
-    const { resetPageNumber, resetMovies } = moviesSlice.actions
+    const { resetPageNumber, resetMovies, setDiscoverProcess } = moviesSlice.actions
 
     const dispatch = useDispatch()
 
-    function handleResetPageNumber() {
+    function handleResetPage() {
       dispatch(resetPageNumber());
       dispatch(resetMovies())
       setSearchParams()
+      dispatch(setDiscoverProcess())
     }
 
     function handleClearWatchLater() {
@@ -38,7 +39,7 @@ const WatchLater = () => {
       {watchLater.watchLaterMovies.length === 0 && (<div className="text-center empty-cart">
         <i className="bi bi-heart" />
         <p>You have no movies saved to watch later.</p>
-        <p>Go to <Link onClick={handleResetPageNumber} to='/'>Home</Link></p>
+        <p>Go to <Link onClick={handleResetPage} to='/'>Home</Link></p>
       </div>)}
     </div>
   )

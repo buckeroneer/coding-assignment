@@ -55,6 +55,7 @@ const moviesSlice = createSlice({
     movies: [],
     fetchStatus: "",
     pageNumber: 1,
+    discoverProcess: true,
     hasNextPage: false,
   },
   reducers: {
@@ -67,6 +68,12 @@ const moviesSlice = createSlice({
     resetPageNumber: (state) => {
       state.pageNumber = 1;
     },
+    setDiscoverProcess: (state) => {
+      state.discoverProcess = true
+    },
+    unsetDiscoverProcess: (state) => {
+      state.discoverProcess = false
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -79,7 +86,7 @@ const moviesSlice = createSlice({
       .addCase(searchMovies.pending, (state) => {
         state.fetchStatus = "loading";
       })
-      .addCase(searchMovies.rejected, (state, action) => {
+      .addCase(searchMovies.rejected, (state) => {
         state.fetchStatus = "error";
       })
       .addCase(discoverMovies.fulfilled, (state, action) => {
@@ -91,7 +98,7 @@ const moviesSlice = createSlice({
       .addCase(discoverMovies.pending, (state) => {
         state.fetchStatus = "loading";
       })
-      .addCase(discoverMovies.rejected, (state, action) => {
+      .addCase(discoverMovies.rejected, (state) => {
         state.fetchStatus = "error";
       });
   },

@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
-import { moviesSlice } from "../../../store/index.js"
-import { searchMovies, discoverMovies } from "../../../store/moviesSlice.js"
+import { moviesSlice } from "../../../store/index.js";
+import { searchMovies, discoverMovies } from "../../../store/moviesSlice.js";
 
 export default function useMovieSearch() {
   const { movieStore } = useSelector((state) => state);
-  const { pageNumber } = movieStore;
+  const { pageNumber, discoverProcess } = movieStore;
   const { resetMovies, resetPageNumber } = moviesSlice.actions;
   const [searchParams] = useSearchParams();
-  const searchQuery = searchParams.get('search');
+  const searchQuery = searchParams.get("search");
 
   const dispatch = useDispatch();
 
@@ -22,23 +22,22 @@ export default function useMovieSearch() {
     setIsLoading(true);
     setIsError(false);
     setError({});
-    if (pageNumber === 1) {
-      dispatch(resetPageNumber());
-    }
     const controller = new AbortController();
     let requestResult;
-    searchQuery
-      ? (requestResult = dispatch(
-          searchMovies({
-            query: searchQuery,
-            pageNumber: pageNumber,
-          })
-        ))
-      : (requestResult = dispatch(
-          discoverMovies({
-            pageNumber: pageNumber,
-          })
-        ));
+    if (searchQuery && !discoverProcess) {
+      requestResult = dispatch(
+        searchMovies({
+          query: searchQuery,
+          pageNumber: pageNumber,
+        })
+      );
+    } else {
+      requestResult = dispatch(
+        discoverMovies({
+          pageNumber: pageNumber,
+        })
+      );
+    }
 
     requestResult
       .unwrap()
@@ -48,7 +47,7 @@ export default function useMovieSearch() {
       .catch((error) => {
         setIsLoading(false);
         if (error.signal.aborted) {
-          console.log('Aborted')
+          console.log("Aborted");
           return;
         }
         setIsError(true);
@@ -57,7 +56,14 @@ export default function useMovieSearch() {
     return () => {
       controller.abort();
     };
-  }, [searchQuery, pageNumber, dispatch, resetMovies, resetPageNumber]);
+  }, [
+    searchQuery,
+    pageNumber,
+    dispatch,
+    resetMovies,
+    resetPageNumber,
+    discoverProcess,
+  ]);
 
   return { isLoading, isError, error };
 }
