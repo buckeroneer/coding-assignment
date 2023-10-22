@@ -15,7 +15,6 @@ describe("moviesSlice unit tests", () => {
           fetchStatus: "",
           pageNumber: 1,
           hasNextPage: false,
-          previousQuery: "",
         },
         action
       );
@@ -24,7 +23,6 @@ describe("moviesSlice unit tests", () => {
         fetchStatus: "loading",
         pageNumber: 1,
         hasNextPage: false,
-        previousQuery: "",
       });
       expect(action).toEqual({ type: searchMovies.pending });
     });
@@ -40,7 +38,6 @@ describe("moviesSlice unit tests", () => {
           fetchStatus: "",
           pageNumber: 1,
           hasNextPage: false,
-          previousQuery: "",
         },
         action
       );
@@ -51,7 +48,6 @@ describe("moviesSlice unit tests", () => {
         fetchStatus: "success",
         pageNumber: 1,
         hasNextPage: false,
-        previousQuery: "",
       });
     });
 
@@ -63,7 +59,6 @@ describe("moviesSlice unit tests", () => {
           fetchStatus: "",
           pageNumber: 1,
           hasNextPage: false,
-          previousQuery: "",
         },
         action
       );
@@ -73,7 +68,6 @@ describe("moviesSlice unit tests", () => {
         fetchStatus: "error",
         pageNumber: 1,
         hasNextPage: false,
-        previousQuery: "",
       });
       expect(action).toEqual({ type: searchMovies.rejected });
     });
@@ -87,7 +81,6 @@ describe("moviesSlice unit tests", () => {
           fetchStatus: "",
           pageNumber: 1,
           hasNextPage: false,
-          previousQuery: "",
         },
         action
       );
@@ -97,7 +90,6 @@ describe("moviesSlice unit tests", () => {
         fetchStatus: "loading",
         pageNumber: 1,
         hasNextPage: false,
-        previousQuery: "",
       });
       expect(action).toEqual({ type: discoverMovies.pending });
     });
@@ -113,7 +105,6 @@ describe("moviesSlice unit tests", () => {
           fetchStatus: "",
           pageNumber: 1,
           hasNextPage: false,
-          previousQuery: "",
         },
         action
       );
@@ -124,7 +115,6 @@ describe("moviesSlice unit tests", () => {
         fetchStatus: "success",
         pageNumber: 1,
         hasNextPage: true,
-        previousQuery: "",
       });
     });
 
@@ -136,7 +126,6 @@ describe("moviesSlice unit tests", () => {
           fetchStatus: "",
           pageNumber: 1,
           hasNextPage: false,
-          previousQuery: "",
         },
         action
       );
@@ -145,7 +134,6 @@ describe("moviesSlice unit tests", () => {
         fetchStatus: "error",
         pageNumber: 1,
         hasNextPage: false,
-        previousQuery: "",
       });
       expect(action).toEqual({ type: discoverMovies.rejected });
     });

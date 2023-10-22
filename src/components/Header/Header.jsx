@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, createSearchParams, useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import moviesSlice from '../../store/moviesSlice'
@@ -6,10 +6,13 @@ import moviesSlice from '../../store/moviesSlice'
 import "./header.scss";
 
 const Header = () => {
-  const { starred, movieStore } = useSelector((state) => state);
+  const { starred } = useSelector((state) => state);
   const starredMovies = starred.starredMovies;
-  const { previousQuery } = movieStore;
-  const { resetMovies, resetPageNumber, setPreviousQuery } = moviesSlice.actions
+  
+  const { resetMovies, resetPageNumber } = moviesSlice.actions
+
+  const [searchParams, setSearchParams] = useSearchParams()
+  const searchQuery = searchParams.get('search')
 
   const navigate = useNavigate();
   const dispatch = useDispatch()
@@ -20,13 +23,13 @@ const Header = () => {
   }
 
   const getSearchResults = (query) => {
-    if (previousQuery !== query) {
+    if (searchQuery !== query) {
       dispatch(resetPageNumber())
       dispatch(resetMovies())
       if (query !== '') {
-        dispatch(setPreviousQuery(query))
+        setSearchParams(createSearchParams({ search: query }))
       } else {
-        dispatch(setPreviousQuery(''))
+        setSearchParams(createSearchParams())
       }
     }
   }
@@ -60,7 +63,7 @@ const Header = () => {
             <i className="bi bi-star" />
           )}
         </NavLink>
-        <NavLink to="/watch-later" className="nav-fav">
+        <NavLink to="/watch-later" className="nav-fav" data-testid="nav-fav">
           watch later
         </NavLink>
       </nav>

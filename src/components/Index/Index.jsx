@@ -7,10 +7,10 @@ import { moviesSlice } from '../../store/index.js'
 import useMovieSearch from "./hooks/useMovieSearch.js";
 
 const Index = () => {
-    const { movieStore } = useSelector((state) => state)
-    const { movies, hasNextPage } = movieStore
-    const { increasePageNumber } = moviesSlice.actions
-    const dispatch = useDispatch()
+    const { movieStore } = useSelector((state) => state);
+    const { movies, hasNextPage } = movieStore;
+    const { increasePageNumber } = moviesSlice.actions;
+    const dispatch = useDispatch();
 
     const { isLoading, isError, error } =
       useMovieSearch();

@@ -2,6 +2,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { getMoviesByDiscover, getMoviesBySearchTerm } from "../api/movies.js";
 
+function removeRepeatedMovies(movies) {
+  const uniqueMovies = movies.filter(
+    (value, index, self) =>
+      index === self.findIndex((t) => t.id === value.id)
+  );
+
+  return uniqueMovies
+}
+
 export const searchMovies = createAsyncThunk(
   "search-movies",
   async (params, thunkAPI) => {
@@ -14,36 +23,31 @@ export const searchMovies = createAsyncThunk(
       );
 
       return await response;
-      
     } catch (error) {
       return thunkAPI.rejectWithValue({
         message: "Error querying movies",
-        signal: thunkAPI.signal
-      })
+        signal: thunkAPI.signal,
+      });
     }
   }
 );
 
 export const discoverMovies = createAsyncThunk(
-    "discover-movies",
-    async (params, thunkAPI) => {
-      const { pageNumber } = params;
-      try {
-        const response = await getMoviesByDiscover(
-          pageNumber,
-          thunkAPI.signal
-        );
+  "discover-movies",
+  async (params, thunkAPI) => {
+    const { pageNumber } = params;
+    try {
+      const response = await getMoviesByDiscover(pageNumber, thunkAPI.signal);
 
-        return await response;
-
-      } catch (error) {
-        return thunkAPI.rejectWithValue({
-            message: "Error querying movies",
-            signal: thunkAPI.signal
-          })
-      }
+      return await response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        message: "Error querying movies",
+        signal: thunkAPI.signal,
+      });
     }
-  );
+  }
+);
 
 const moviesSlice = createSlice({
   name: "movies",
@@ -52,12 +56,10 @@ const moviesSlice = createSlice({
     fetchStatus: "",
     pageNumber: 1,
     hasNextPage: false,
-    previousQuery: "",
-    errorMessage: "",
   },
   reducers: {
     resetMovies: (state) => {
-        state.movies = []
+      state.movies = [];
     },
     increasePageNumber: (state) => {
       state.pageNumber = state.pageNumber + 1;
@@ -65,15 +67,13 @@ const moviesSlice = createSlice({
     resetPageNumber: (state) => {
       state.pageNumber = 1;
     },
-    setPreviousQuery: (state, action) => {
-      state.previousQuery = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(searchMovies.fulfilled, (state, action) => {
-        state.movies = [...state.movies, ...action.payload.results]
-        state.hasNextPage = state.pageNumber < action.payload.total_pages
+        state.movies = [...state.movies, ...action.payload.results];
+        state.movies = removeRepeatedMovies(state.movies);
+        state.hasNextPage = state.pageNumber < action.payload.total_pages;
         state.fetchStatus = "success";
       })
       .addCase(searchMovies.pending, (state) => {
@@ -81,11 +81,11 @@ const moviesSlice = createSlice({
       })
       .addCase(searchMovies.rejected, (state, action) => {
         state.fetchStatus = "error";
-        state.errorMessage = action.payload.message
       })
       .addCase(discoverMovies.fulfilled, (state, action) => {
-        state.movies = [...state.movies, ...action.payload.results]
-        state.hasNextPage = state.pageNumber < action.payload.total_pages
+        state.movies = [...state.movies, ...action.payload.results];
+        state.movies = removeRepeatedMovies(state.movies);
+        state.hasNextPage = state.pageNumber < action.payload.total_pages;
         state.fetchStatus = "success";
       })
       .addCase(discoverMovies.pending, (state) => {
@@ -93,7 +93,6 @@ const moviesSlice = createSlice({
       })
       .addCase(discoverMovies.rejected, (state, action) => {
         state.fetchStatus = "error";
-        state.errorMessage = action.payload.message
       });
   },
 });

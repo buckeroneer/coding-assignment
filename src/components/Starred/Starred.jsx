@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { moviesSlice, starredSlice } from '../../store/index.js'
 import { Movies } from '../index.js'
 import './starred.scss'
@@ -9,12 +9,15 @@ const Starred = () => {
     const state = useSelector((state) => state);
     const { starred } = state;
     const { clearAllStarred } = starredSlice.actions;
-    const { resetPageNumber } = moviesSlice.actions;
+    const [, setSearchParams] = useSearchParams();
+    const { resetPageNumber, resetMovies } = moviesSlice.actions;
 
     const dispatch = useDispatch()
 
     function handleResetPageNumber() {
       dispatch(resetPageNumber());
+      dispatch(resetMovies(""));
+      setSearchParams();
     }
 
     function handleClearStarred() {

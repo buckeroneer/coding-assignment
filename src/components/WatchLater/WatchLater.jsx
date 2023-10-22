@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
+
 import { moviesSlice, watchLaterSlice } from '../../store/index.js'
 import { Movies } from '../index.js'
 import './watchLater.scss'
@@ -9,12 +10,15 @@ const WatchLater = () => {
     const state = useSelector((state) => state)
     const { watchLater } = state
     const { removeAllWatchLater } = watchLaterSlice.actions
-    const { resetPageNumber } = moviesSlice.actions
+    const [, setSearchParams] = useSearchParams();
+    const { resetPageNumber, resetMovies } = moviesSlice.actions
 
     const dispatch = useDispatch()
 
     function handleResetPageNumber() {
       dispatch(resetPageNumber());
+      dispatch(resetMovies())
+      setSearchParams()
     }
 
     function handleClearWatchLater() {
@@ -22,8 +26,8 @@ const WatchLater = () => {
     }
 
   return (
-    <div className="starred" data-testid="watch-later-div">
-      {watchLater.watchLaterMovies.length > 0 && (<div data-testid="watch-later-movies" className="starred-movies">
+    <div className="watch-later" data-testid="watch-later-div">
+      {watchLater.watchLaterMovies.length > 0 && (<div data-testid="watch-later-movies" className="watch-later-movies">
         <h6 className="header">Watch Later List</h6>
         <Movies movies={watchLater.watchLaterMovies}/>
         <footer className="text-center">

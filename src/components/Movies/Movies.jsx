@@ -17,7 +17,6 @@ const Movies = ({ movies, innerRef }) => {
           (vid) => vid.type === "Trailer"
         );
         let key = trailer ? trailer.key : dataMovie.videos.results[0].key;
-        console.log(key)
         setVideoKey(key);
       }
     } catch (error) {

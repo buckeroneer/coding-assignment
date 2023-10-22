@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import { moviesSlice } from "../../../store/index.js"
 import { searchMovies, discoverMovies } from "../../../store/moviesSlice.js"
 
 export default function useMovieSearch() {
   const { movieStore } = useSelector((state) => state);
-  const { pageNumber, previousQuery } = movieStore;
+  const { pageNumber } = movieStore;
   const { resetMovies, resetPageNumber } = moviesSlice.actions;
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('search');
 
   const dispatch = useDispatch();
 
@@ -24,10 +27,10 @@ export default function useMovieSearch() {
     }
     const controller = new AbortController();
     let requestResult;
-    previousQuery !== ""
+    searchQuery
       ? (requestResult = dispatch(
           searchMovies({
-            query: previousQuery,
+            query: searchQuery,
             pageNumber: pageNumber,
           })
         ))
@@ -54,7 +57,7 @@ export default function useMovieSearch() {
     return () => {
       controller.abort();
     };
-  }, [previousQuery, pageNumber, dispatch, resetMovies, resetPageNumber]);
+  }, [searchQuery, pageNumber, dispatch, resetMovies, resetPageNumber]);
 
   return { isLoading, isError, error };
 }
