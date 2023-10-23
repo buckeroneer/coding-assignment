@@ -1,7 +1,18 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { renderWithProviders } from "./test/utils"
-import App from './App'
+import { renderWithProviders } from './utils'
+import App from '../App'
+
+beforeEach(() => {
+  // Mocking the observer is necessary for the infinite scroll functionality
+  const mockIntersectionObserver = jest.fn();
+  mockIntersectionObserver.mockReturnValue({
+    observe: () => null,
+    unobserve: () => null,
+    disconnect: () => null,
+  });
+  window.IntersectionObserver = mockIntersectionObserver;
+});
 
 it('renders watch later link', () => {
   renderWithProviders(<App />)
@@ -35,7 +46,7 @@ it('renders starred component', async() => {
   const user = userEvent.setup()
   await user.click(screen.getByTestId('nav-starred'))
   expect(screen.getByText(/There are no starred movies/i)).toBeInTheDocument()
-  await waitFor(() => {
-    expect(screen.getByTestId('starred')).toBeInTheDocument()
-  })  
+
+  const starredElement = screen.getByTestId('starred');
+  expect(starredElement).toBeInTheDocument()
 })

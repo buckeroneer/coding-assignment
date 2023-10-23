@@ -3,6 +3,17 @@ import userEvent from '@testing-library/user-event'
 import { renderWithProviders } from './utils'
 import App from '../App'
 
+beforeEach(() => {
+  // Mocking the observer is necessary for the infinite scroll functionality
+  const mockIntersectionObserver = jest.fn();
+  mockIntersectionObserver.mockReturnValue({
+    observe: () => null,
+    unobserve: () => null,
+    disconnect: () => null,
+  });
+  window.IntersectionObserver = mockIntersectionObserver;
+});
+
 it('movies starred and saved to watch later', async () => {
     renderWithProviders(<App />)
 
